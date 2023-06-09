@@ -1,0 +1,289 @@
+---
+title: "Ülkelerin Gelişmişlik Düzeylerinin Sosyo-ekonomik Göstergelerle İlişkisi"
+author: 
+  - Berrin Eviren[^1]
+bibliography: ../bibliography/biblio.bib
+csl: ../csl/apa-tr.csl
+header-includes:
+  - \usepackage{polyglossia}
+  - \setmainlanguage{turkish}
+  - \usepackage{booktabs}
+  - \usepackage{caption} 
+  - \captionsetup[table]{skip=10pt}
+output:
+  bookdown::pdf_document2:
+    fig_caption: yes
+    fig_height: 3
+    fig_width: 4
+    keep_tex: no
+    latex_engine: xelatex
+    number_sections: yes
+    toc: no
+geometry: margin=1in
+link-citations: yes
+urlcolor: blue
+fontsize: 12pt
+biblio-style: apalike
+abstract: |
+  Bu çalışmada, gelişmişlik düzeyi ile sosyo-ekonomik göstergeler arasındaki ilişkiyi analiz etmek amaçlanmıştır. Bu analiz için kişi başına düşen GSYH bağımlı değişken olarak kabul edilmiş, gelişmişlik düzeyi arttıkça kişi başına düşen GSYH da artar varsayımından yol çıkılmıştır. Veri setindeki 52 ülkenin sosyoekonomik değişkenleri kullanılarak bu ilişki incelenmiştir. Çalışmanın temel amacı, kişi başına düşen GSYİH, gelir grubu, nüfus, bölge, işsizlik oranı, enflasyon oranı, yoksulluk oranı, yaşam beklentisi ve kişi başına sağlık harcaması faktörleriyle gelişmişlik düzeyleri arasındaki ilişkiyi belirlemektir. Çalışmada kullanılan veri seti World Bank, International Labour Organization, EuroStat ve Türkiye İstatistik Kurumu (TÜİK) verileri kullanılarak oluşturulmuştur. Gelişmiş ülkeler, gelişmekte olan ülkeler ve az gelişmiş ülkeler Birleşmiş Milletler İnsani Gelişim Raporuna göre seçilmiştir. Veri setindeki değişkenler arasında kişi başına düşen GSYİH, gelir grubu, coğrafi bölge, işsizlik oranı, enflasyon oranı, yoksulluk oranı, okuryazarlık oranı, yaşam süresi ve kişi başına sağlık harcaması yer almaktadır. Çalışmada kullanılan yöntem doğrusal regresyon analizidir. Doğrusal regresyon analizi, bağımlı bir değişken ile bağımsız bir veya daha fazla değişken arasındaki ilişkiyi modellemek için kullanılan bir yöntemdir. Kişi başına düşen GSYİH, işsizlik oranı, enflasyon oranı, yoksulluk oranı, okuryazarlık oranı, yaşam süresi ve kişi başına sağlık harcaması arasındaki ilişkiler ayrı ayrı analiz edilmiştir. Çalışmanın sonuçlarına göre, kişi başına düşen GSYİH ile gelişmişlik düzeyi arasında pozitif bir ilişki olduğu gözlenmektedir. Kişi başına düşen GSYİH arttıkça gelişmişlik düzeyinin de arttığı görülmektedir. Gelişmişlik düzeyi ile enflaasyon oranı ve işsizlik oranı arasında istatistiksel olarak anlamlı bir ilişki kurulamadığı, yoksulluk oranı, okuma yazma oranı, yaşam süresi ve sağlık harcamaları arasında istatistiksel olarak anlamlı ilişkiler kurulabildiği görülmüştür. Coğrafi bölge ve gelir grubu değişkenleri için regresyon analizi yapılmamıştır. Bu nedenle çalışmadaki verilere dayanarak coğrafi bölge, gelir grubu değişkenleri ile gelişmişlik düzeyi arasında bir ilişki olup olmadığı yorumu yapılamaz. Bu çalışma, gelişmişlik düzeyi ile çeşitli sosyoekonomik faktörler arasındaki ilişkiyi anlamak için bir temel sağlamaktadır. Elde edilen bulgular, ekonomik ve sosyal kalkınma çabaları için politika yapıcılar ve araştırmacılar tarafından değerlendirilebilir. Ancak, bu çalışma kendi başına yeterli bir analiz sunmamaktadır ve daha fazla araştırmaya ihtiyaç duyulmaktadır.
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache = FALSE, echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+<!-- ======================================================================= -->
+<!-- ============================== NOTLAR ================================= -->
+<!-- ======================================================================= -->
+[^1]: 17080212, [Github Repo](https://github.com/berrineviren/Final)
+
+
+# Giriş
+Gelişmiş ülke kavramı ekonomik ve sosyal açıdan yüksek seviyede olan ülkeleri tanımlamak için kullanılır. Gelişmiş ülkeler yüksek yaşam, eğitim ve sağlık hizmeti kalitesine ve yüksek teknolojiye sahiptirler. Norveç, Almanya, Belçika gibi ülkeler gelişmiş ülkelere örnek oluşturmaktadır.
+
+Gelişmekte olan ülkeler, gelişmiş ülkelere kıyasla ekonomik ve sosyal açıdan daha düşük, az gelişmiş ülkelere kıyasla daha yüksek seviyede olan ülkelerdir.
+
+Az gelişmiş ülkeler, ekonomik ve sosyal açıdan düşük seviyede olan ülkelerdir. Bu ülkeler düşük yaşam kalitesine, kısıtlı eğitim ve sağlık imkanlarına ve düşük teknolojik gelişmişliğe sahiptirler. Bu ülkelere Sudan, Çad ve Togo örnek verilebilir.
+
+Ülkelerin gelişmişlik düzeylerinin sosyo-ekonomik göstergelerle ilişkisi olduğu bilinmektedir. Aynı gelişmişlik düzeyine sahip ülkelerin sosyoekonomik özellikleri benzerlik göstermektedir. Aynı gelişmişlik düzeyindeki ülkelerin eğitim düzeyi, suç oranları, sağlık harcamaları gibi verileri aynı aralıktadır. Çoğunlukla, gelişmiş ülkelerde demokrasi ve yasaların güvenilirliği, eğitim seviyesinin yüksek olması, teknolijye erişimin kolaylığı gibi unsurlar söz konusuyken gelişmekte olan ve az gelişmiş ülkelerde bu unsurlar tam olarak sağlanabilmiş değildir. Az gelişmiş ülkelerin bir çoğunda sağlık harcamaları ve eğitim seviyesi düşüktür.Gelişmiş ülkelerde kişi başına düşen GSYİH miktarı yüksekken gelişmekte olan ve az gelişmiş ülkelerde tam tersi söz konusudur.
+
+## Çalışmanın Amacı
+Bu çalışmanın amacı kişi başına düşen GSYİH, gelir grubu, nüfus, bölge, işsizlik oranı, enflasyon oranı, yoksulluk oranı, yaşam beklentisi ve kişi başına sağlık harcaması faktörleriyle gelişmişlik düzeyleri arasında ilişki kurmaktır.Gelişmişlik düzeyinin her değişken için ayrı ayrı değerlendirilip aralarında bir ilişki olup olmadığının ortaya konması beklenmektedir.Çalışmada az gelişmiş, gelişmekte olan ve gelişmiş ülkelerin, bölgelerin ve gelir gruplarının ortak özelliklerinin neler olduğu ayrı ayrı tartışılacaktır.
+
+Her gelir grubundan 13, toplamda 52 ülke seçilmiştir. Ülkelerin verileri World Bank, International Labour Organization, EuroStat ve Tuik verileri kullanılarak bir araya getirilmiştir. Birleşmiş Milletler İnsani Gelişme Raporu'na göre seçilen ülkelerin 16'sı az gelişmiş, 7'si gelişmiş ve 29'u gelişmekte olan ülkelerdir.
+
+## Literatür 
+
+@tacs2017faktor Türkiye ve Avrupa Birliği üyesi ülkeleri, sosyo-ekonomik değişkenler kullanarak, gelişmişlik düzeylerine göre karşılaştırmışlardır. Türkiye'nin gelişmişlik düzeyinin Avrupa Birliği ülkelerine göre konumu belirlenmiştir. Bu çalışma için faktör analizi yöntemi kullanılmıştır. Başlangıçta 60 değişken seçilmiş daha sonra gelişmişlik düzeyini en iyi ifade eden değişkenler belirlenerek değişken sayısı önce 28'e en sonsa 6'ya indirilmiştir.
+
+@kavasouglu2007sosyo seçilen değişkenlerle Türkiye'deki illerin gelişmişlik seviyesini tespit etmiş ve buna göre gelişmişlik sıralamalarını yapmıştır. Çalışmaya başlangıçta 100'e yakın değişken ile başlanmış, daha sonra seçilen 58 değişkenle çalışmaya devam edilmiştir. İstihdam, eğitim, sağlık, altyapı, sektör gibi değişkenler kullanılmıştır. Çalışmada temel bileşenler analizi tekniği kullanılmıştır.
+
+@erol2013turkiye çalışmada temel bileşenler analizi yöntemi kullanılarak Türkiye ve Avrupa Birliği üyesi ülkelerin sosyo-ekonomik gelişmişlik endeksleri hesaplanmış ve Türkiye'nin Avrupa birliği ülkeler arasındaki durumu tespit edilmiştir. 19 değişken seçilmiş 29 ülke incelenmiştir.
+
+@szirmai2015socio genel olarak sosyo-ekonomik gelişme ve gelişmekte olan ülkeler üzerine bir çalışma amaçlanmıştır. Demografik, politik,sosyal ve kültürel faktörler gibi birçok faktör ekonomik gelişmenin incelenmesi konusunda kitapta sıkça yer almıştır.
+
+@kabir2008determinants çoklu regresyon ve probit yöntemlerini kullanarak yaşam beklentisinin sosyo-ekonomik belirleyicilerini incelemiştir. Kişi başına düşen gelir, okuryazar oranı, sağlık harcamaları gibi faktörler gelişmekte olan ülkelerde yaşam beklentisini açıklamada kullanılmıştır.
+
+# Veri 
+Bu çalışmada Birleşmiş Milletler İnsani Gelişim Raporu baz alınarak gelişmiş, gelişmekte olan ve az gelişmiş ülkeler seçilmiş ülkelerin sosyoekonomik değişkenleri kullanılarak gelişmişlik düzeyi arasında ilişki kurmak amaçlanmıştır. Veri seti oluşturulurken World Bank, International Labour Organization, EuroStat ve Tuik verilerine yer verilmiştir. Veri setinde 52 gözlem 12 değişken yer almaktadır. Bu değişkenler kişi başına düşen GSYH, gelir grubu, coğrafi bölge, 15 yaş üstündekilerin işsizlik oranı, yıllık enflasyon oranı, yoksulluk oranı, okuma yazma oranı, yaşam süresinin kaç yıl olduğu, kişi başına sağlık harcaması ve gelişmişlik düzeyidir. Bu değişkenler veri setinde sırasıyla development_level, gdp_percapita, income_group, region, unemployment, inflation, poverty, literacy, life_expactansy ve health_expenditure ve sütunlarında gösterilmiştir.
+
+```{r, echo=FALSE}
+library(tidyverse)
+library(here)
+library(readxl)
+dt <- read_excel("C:/Users/mTne/OneDrive/Belgeler/Final/data/CountriesData.xlsx")
+```
+
+```{r, echo=FALSE}
+library(xtable)
+library(summarytools)
+st_options(lang = "tr")
+```
+
+```{r, echo=FALSE}
+library(magrittr)
+library(knitr)
+library(kableExtra)
+library(dplyr)
+```
+
+_Özet İstatistikler Tablosu_
+
+```{r results='asis', echo=FALSE}
+dt %>%
+  group_by(development_level) %>%
+  summarise(mean_gdp_percapita = mean(gdp_percapita),
+            mean_unemployment = mean(unemployment),
+            mean_inflation = mean(inflation),
+            mean_poverty = mean(poverty),
+            mean_literacy = mean(literacy),
+            mean_life_expactansy = mean(life_expactansy),
+            mean_health_expenditure = mean(health_expenditure)) %>%
+  kable() %>%
+  kable_styling(bootstrap_options = "striped", latex_options = c("hold_position", "scale_down"))
+```
+
+
+
+# Yöntem ve Veri Analizi
+Bu çalışmada doğrusal regresyon analizi yöntemi kullanılacaktır. Doğrusal regresyon analizi yöntemi; bağımlı bir y değişkeni ile, bağımsız bir veya daha fazla x değişkeninin arasındaki ilişkiyi modelleme yöntemidir. $y_i = \beta_0 + \beta_1x_i + \varepsilon_i$ şeklinde gösterilir. $\beta_0$ ve $\beta_1$ değerleri katsayıları $\varepsilon$ değeri hatayı gösterir. $\beta_0$ katsayısı doğrunun y eksenini kestiği noktayı, $\beta_1$ katsayısı da doğrunun eğimini vermektedir. Analizde elde edilen p değeri modelin anlamlılığını ifade etmektedir. p değerinin 0.05'ten küçük olması istatistiksel olarak anlamlı olduğunu gösterir.
+
+Birleşmiş Milletler İnsani Gelişim Raporuna göre; gelişmiş ülkelerin kişi başına GSYH'sı 40000 ile 60000 \$ arasında, gelişmekte olan ülkelerin kişi başına GSYH'sı 2000 ile 10000 \$ arasında, az gelişmiş ülkelerin ise kişi başına GSYH'sı 1000 ile 5000 \$ arasındadır. Bu raporda kişi başına GSYH bir gelişmişlik düzeyi göstergesi olarak kabul edilmiştir. Bu nedenle burada da bağımlı değişken olarak kişi başına GSYH seçilmiştir. Bağımsız değişkenler işsizlik oranı, enflasyon oranı, yoksulluk oranı, okuma yazma oranı, yaşam süresi ve kişi başına sağlık harcamasıdır. Kişi başına GSYH arttıkça gelişmişlik düzeyinin arttığı varsayımından yola çıkarak bu oranın artamasıyla okuma yazma oranının, yaşam süresinin ve kişi başına sağlık harcamasının artması; işsizlik, enflasyon, yoksulluk oranlarının azalması beklenmektedir. Analizde kullanılacak altı denklem vardır. Sırasıyla; işsizlik oranı ve kişi başına GSYH arasındaki ilişki, enflasyon oranı ve kişi başına GSYH arasındaki ilişki, yoksulluk oranı ve kişi başına GSYH arasındaki ilişki, okuma yazma oranı ve kişi başına GSYH arasındaki ilişki, yaşama süresi kişi başına GSYH arasındaki ilişki, kişi başına sağlık harcaması ve kişi başına GSYH arasındaki ilişki incelenecektir.
+
+Başka bir deyişle; kişi başına GSYH bir gelişmişlik düzeyi ölçütü olarak ele alınmıştır. Kişi başına GSYH arttıkça gelişmişlik düzeyinin arttığı kabul edilmiştir. Bu çalışmada gelişmişlik düzeyi arttıkça işsizlik azalır, enflasyon oranı azalır, yoksulluk oranı azalır, okuma yazma oranı artar, yaşam süresi artar, kişi başına sağlık harcaması artar varsayımları incenelecektir.
+
+$$
+Kisi basına GSYH = \beta_0 + \beta_1 Bagımsız degisken + \varepsilon
+$$
+
+**İşsizlik Oranı ve Kişi Başına GSYH**
+
+```{r, echo=FALSE}
+dt %>%
+  ggplot(aes(gdp_percapita, unemployment)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+```{r, echo=FALSE}
+Model_1 <- lm(unemployment ~ gdp_percapita, data = dt)
+summary(Model_1)
+```
+
+$$
+GSYH_{\text{kişi başına GSYH}} = 7.304 - 3.108 \times \text{gdp\_percapita} + \varepsilon
+$$
+
+Bu denklemde, $\beta_0$ değeri 7.304, işsizlik oranının, kişi başına düşen GSYH'nın 3.108×gdp_percapita kadar azaldığını gösterir. Analizde p değeri 0.335 çıkmıştır bu nedenle kişi başına GSYH arttıkça işsizlik oranı azalır varsayımı istatistiksel olarak anlamlı değildir. Kişi başına düşen GSYH artıkça işsizlik oranı azalmamaktadır. veri seti incelendiğinde de bu varsayımın doğru olmayacağı görülmektedir. Bazı ülkeler için bu varsayım doğru olsa bile varsayımı genellemek mümkün değildir. Az gelişmiş ülkelerde işsizlik oranı çok düşük olabilirken gelişmiş ve gelişmekte olan ülkelerde bu oranlar daha yüksek olabilmektedir. Birleşmiş Milletler de dahil bir çok kaynak işsizlik oranını bir gelişmişlik düzeyi ölçütü olarak kabul etmemektedir. İşsizlik oranı iktisadi bir göstergedir genel olarak ülkelerin ekonomilerine ilişkin çalışmalarda kullanılmaktadır. Multiple R-squared değeri 0.01861 çıkmıştır bu değer oldukça düşüktür bu da modelin bağımlı değişkenin varyansını düşük bir oranda açıkladığını gösterir. 
+
+**Enflasyon Oranı ve Kişi Başına GSYH**
+
+```{r, echo=FALSE}
+dt %>%
+  ggplot(aes(gdp_percapita, inflation)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+```{r, echo=FALSE}
+Model_2 <- lm(inflation ~ gdp_percapita, data = dt)
+summary(Model_2)
+```
+
+$$
+GSYH_{\text{kişi başına GSYH}} = 16.96 - 0.00028 \times \text{gdp\_percapita} + \varepsilon
+$$
+
+Bu denklemde $\beta_0$ değeri 16.96, enflasyonun, kişi başına düşen GSYH'nın 0.00028×gdp_percapita kadar azaldığını gösterir. Analizde p değeri 0.4 çıkmıştır bu nedenle kişi başına GSYH arttıkça enflasyon oranı azalır varsayımı istatistiksel olarak anlamlı değildir. İşszilik oranı için söylenenler enflasyon oranı için de söylenebilir. Enflasyon oranı da gelişmişlik düzeyi ölçütü olarak değerlendirilmemektedir.  Multiple R-squared değeri 0.01411 çıkmıştır bu değer oldukça düşüktür bu da modelin bağımlı değişkenin varyansını düşük bir oranda açıkladığını gösterir.
+
+**Yoksulluk Oranı ve Kişi Başına GSYH**
+
+```{r, echo=FALSE}
+dt %>%
+  ggplot(aes(gdp_percapita, poverty)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+```{r, echo=FALSE}
+Model_3 <- lm(poverty ~ gdp_percapita, data = dt)
+summary(Model_3)
+```
+
+$$
+GSYH_{\text{kişi başına GSYH}} = 34.30 - 0.0005383 \times \text{gdp\_percapita} + \varepsilon
+$$
+
+Bu denklemde $\beta_0$ değeri 34.30, yoksulluk oranının, kişi başına düşen GSYH'nın 0.00028×gdp_percapita kadar azaldığını gösterir. Analizde p değeri 4.29e-07 çıkmıştır bu nedenle kişi başına GSYH arttıkça yoksulluk oranı azalır varsayımı istatistiksel olarak anlamlıdır. Dolayısıyla gelişmişlik düzeyi arttıkça yoksulluk oranının azaldığını söyleyebiliriz. Veri seti incelendiğinde de bu varsayımın doğru olduğu görülmektedir. Veri setinde mevcut olan ülkelere bakıldığında gelişmiş ülkelerin yoksulluk oranları ortalaması %3.5 , gelişmekte olan ülkelerin %21.68 , az gelişmiş ülkelerin ise %43.88'dir. Multiple R-squared değeri 0.4032 çıkmıştır bu da modelin bağımlı değişkenin varyansının yaklaşık olarak %40'ını açıkladığını gösterir.
+
+**Okuma Yazma Oranı ve Kişi Başına GSYH**
+
+```{r, echo=FALSE}
+dt %>%
+  ggplot(aes(gdp_percapita, literacy)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+```{r, echo=FALSE}
+Model_4 <- lm(literacy ~ gdp_percapita, data = dt)
+summary(Model_4)
+```
+
+$$
+GSYH_{\text{kişi başına GSYH}} = 75.52 + 0.0004272 \times \text{gdp\_percapita} + \varepsilon
+$$
+
+Bu denklemde $\beta_0$ değeri 75.72, okuma yazma oranının, kişi başına düşen GSYH'nın 0.0004272×gdp_percapita kadar arttığını gösterir. Analizin p değeri 0.00076 olduğu için kişi başına GSYH arttıkça okuma yazma oranı da artar varsayımı istatistiksel olarak anlamlıdır. Dolayısıyla okuma yazma oranı arttıkça gelişmişlik düzeyinin de arttığını söyleyebiliriz. Veri seti incelendiğinde bu varsayımın doğru olduğu görülmektedir. Ülkelerin gelişmişlik düzeyi arttıkça okuma yazma oranları da artmaktadır. Veri setinde mevcut olan ülkelere bakıldığında gelişmiş ülkelerin okuma yazma oranları ortalaması %97.5 , gelişmekte olan ülkelerin %92.59 , az gelişmiş ülkelerin ise %56.1'dir. Birleşmiş Milletler İnsani Gelişim Raporunda ve birçok kaynakta da okuma yazma oranı gelişmişlik düzeyinin sosyoekonomik göstergelerinden biri olarak kabul edilmektedir. Multiple R-squared değeri 0.2046 çıkmıştır bu da modelin bağımlı değişkenin varyansının yaklaşık olarak %20'sini açıkladığını gösterir.
+
+**Yaşam Süresi Beklentisi ve Kişi Başına GSYH**
+
+```{r, echo=FALSE}
+dt %>%
+  ggplot(aes(gdp_percapita, life_expactansy)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+```{r, echo=FALSE}
+Model_5 <- lm(life_expactansy ~ gdp_percapita, data = dt)
+summary(Model_5)
+```
+
+$$
+GSYH_{\text{kişi başına GSYH}} = 66.34 + 0.0002675 \times \text{gdp\_percapita} + \varepsilon
+$$
+
+Bu denklemde $\beta_0$ değeri 66.34, yaşam süresinin, kişi başına düşen GSYH'nın 0.0002675×gdp_percapita kadar arttığını gösterir.Analizin p değeri 1.37e-09 olduğu için kişi başına GSYH arttıkça yaşam süresi de artar varsayımı istatistiksel olarak anlamlıdır. Dolayısıyla gelişmişlik düzeyi arttıkça yaşam süresinin de arttığı söylenebilir. Veri setinde mevcut olan ülkelere bakıldığında gelişmiş ülkelerin yaşam süreleri ortalaması 81.1, gelişmekte olan ülkelerin 72.1, az gelişmiş ülkelerin ise 62.5 yıldır. Multiple R-squared değeri 0.5234 çıkmıştır bu da modelin bağımlı değişkenin varyansının yaklaşık olarak %52'sini açıkladığını gösterir.
+
+**Kişi Başına Sağlık Harcaması ve Kişi Başına GSYH**
+
+```{r, echo=FALSE}
+dt %>%
+  ggplot(aes(gdp_percapita,  health_expenditure)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+```{r, echo=FALSE}
+Model_6 <- lm(health_expenditure ~ gdp_percapita, data = dt)
+summary(Model_6)
+```
+
+$$
+GSYH_{\text{kişi başına GSYH}} = -168.3 + 0.09265 \times \text{gdp\_percapita} + \varepsilon
+$$
+
+Bu denklemde $\beta_0$ değeri -168.3, kişi başına sağlık harcamasının, kişi başına düşen GSYH'nın 0.09265×gdp_percapita kadar arttığını gösterir.Analizin p değeri <2e-16'dır. Bu oran oldukça küçük olduğu için kişi başına GSYH arttıkça kişi başına sağlık harcaması da artar varsayımı istatistiksel olarak anlamlıdır. Dolayısıyla gelişmişlik düzeyi arttıkça kişi başına sağlık harcamasının da arttığı söylenebilir. Veri setinde mevcut olan ülkelere bakıldığında gelişmiş ülkelerin kişi başına sağlık harcamaları ortalaması 6277.47, gelişmekte olan ülkelerin 699.03, az gelişmiş ülkelerin ise 41.06 dolardır. Multiple R-squared değeri 0.8342 çıkmıştır bu da modelin bağımlı değişkenin varyansının yaklaşık olarak %83'ünü açıkladığını gösterir.
+
+_Coğrafi bölgelerin Gelişmişlik Seviyelerine Dağılımı_
+
+```{r, echo=FALSE}
+dt %>%
+  select(development_level, region) %>%
+  table() %>%
+  as.data.frame() %>%
+  kable() %>%
+  kable_styling() %>%
+  kableExtra::kable_styling(latex_options = c("striped", "hold_position"), font_size = 10) %>%
+  add_header_above() %>%
+  kable_styling(latex_options = "striped", full_width = FALSE)
+```
+
+Tabloda ülkerlerin gelişmişlik düzeyleri ve coğrafi bölge dağılımları gösterilmiştir. Tabloya bakıldığında gelişmiş ülkelerin 6'sı Avrupa & Orta Asya bölgesinde 1'i Kuzey Amerika bölgesinde, az gelişmiş ülkelerin 14'ü Sahra-Altı Afrika, 1'i Güney Asya ve 1'i Latin Amerika & Karayipler bölgesinde, gelişmekte olan ülkelerin 4'ü Doğu Asya & Pasifik, 7'si Avrupa & Orta Asya, 8'i Latin Amerika & Karayipler, 3'ü Orta Doğu & Kuzey Afrika, 2'si Güney Asya, 5', Sahra-Altı Afrika bölgesinde yer almaktadır. Az gelişmiş ülkelerin çoğunlukla Sahra-Altı Afrika bölgesinde, gelişmiş ülkelerinse Avrupa & Orta Asya bölgesinde yer aldığı görülmektedir.
+
+
+_Gelir Gruplarının Gelişmişlik Seviyelerine Dağılımı_
+
+
+```{r, echo=FALSE}
+dt %>%
+  select(development_level, income_group) %>%
+  table() %>%
+  kable() %>%
+  kable_styling() %>%
+  kableExtra::kable_styling(latex_options = c("striped", "hold_position"), font_size = 10) %>%
+  add_header_above() %>%
+  kable_styling(latex_options = "striped")
+```
+
+Tabloda ülkelerin gelişmişlik düzeyleri ve gelir grupları dağılımı gösterilmiştir. Tabloya bakıldığında gelişmiş ülkelerin tamamı yüksek gelir grubunda, az gelişmiş ülkelerin 13 tanesi düşük, 3 tanesi alt orta gelir grubunda, gelişmekte olan ülkelerin 13 tanesi üst orta, 6 tanesi üst, 10 tanesi alt orta gelir grubunda yer almaktadır.
+
+Ancak bu tablolar bize ülkelerin gelişmişlik düzeyleri ile gelir grupları veya coğrafi bölgeleri arasında bir ilişki kurulup kurulamayacağı bilgisini vermez.
+
+
+
+
+
+
+
+# Sonuç
+Çalışmanın sonucunda 52 ülkenin sosyoekonomik göstergeleri gelişmişlik düzeyi açısından kişi başına GSYH ile ilişkileri baz alınarak incelenmiş, bu göstergelerin gelişmişlik düzeyini açıklamak açısından bir gösterge olup olmayacağı tartışılmıştır. Bu analizi yapmak için doğrusal regresyon yöntemi kullanılmıştır.
+
+Yapılan analiz sonucunda işsizlik oranı ve enflasyon oranı ile kişi başına düşen GSYH arasında yani gelişmişlik düzeyi arasında istatistiksel olarak anlamlı bir ilişki olmadığı ancak yoksulluk oranı, okuma yazma oranı, yaşam süresi, kişi başına sağlık harcaması ile kişi başına GSYH arasında istatistiksel anlamlı bir ilişki kurulabildiği yani gelişmişlik düzeyiyle yoksulluk oranı, okuma yazma oranı, yaşam süresi ve kişi başına sağlık harcaması sosyoekonomik göstergelerinin ilişkili olduğu söylenebilir. Yapılan analize dayanarak okuma yazma oranı, yaşam beklentisi ve kişi başına sağlık harcaması arttıkça gelişmişlik düzeyinin de arttığı, yoksulluk oranı arttıkça kişi başına düşen GSYH'nın azaldığı kabul edilebilir. İşsizlik ve enflasyon oranı iktisadi göstergeleri ve kişi başına GSYH arasında böyle bir genelleme yapılamaz. Çünkü analiz sonucunda göstergeler arasında anlamlı bir ilişki kurulamadığı görülmüştür.
+
+Bunun yanı sıra oluşturulan tablolara bakıldığında ülkelerin gelişmişlik düzeylerine göre gelir grubu dağılımları ve coğrafi bölge dağılımları da görülebilmektedir. Bu tablolara göre gelişmiş ülkelerin tamamı yüksek gelir grubuna, az gelişmiş ülkelerin 13 tanesi düşük, 3 tanesi alt orta gelir grubuna, gelişmekte olan ülkelerin 13 tanesi üst orta, 6 tanesi üst, 10 tanesi alt orta gelir grubuna dahildir. Coğrafi dağılımlarına bakıldığındaysa gelişmiş ülkelerin 6'sı Avrupa & Orta Asya bölgesinde 1'i Kuzey Amerika bölgesinde, az gelişmiş ülkelerin 14'ü Sahra-Altı Afrika, 1'i Güney Asya ve 1'i Latin Amerika & Karayipler bölgesinde, gelişmekte olan ülkelerin 4'ü Doğu Asya & Pasifik, 7'si Avrupa & Orta Asya, 8'i Latin Amerika & Karayipler, 3'ü Orta Doğu & Kuzey Afrika, 2'si Güney Asya, 5', Sahra-Altı Afrika bölgesindedir.
+
+\newpage
+# Kaynakça {#references}
+<div id="refs"></div>
+
